@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>APEx</title>
+  <style>
+    :root {
+      /* APEx Dark Runtime Palette */
+      --aura-bg: linear-gradient(135deg, #07122e 0%, #102a63 58%, #0a1433 100%);
+      --glass: rgba(15, 31, 69, 0.94);
+      --text-main: #e5ecff;
+      --text-muted: #9fb0d9;
+      --pastel-pink: #12346f;
+      --pastel-blue: #0a1a3f;
+      --btn-gradient: linear-gradient(to right, #14b8a6 0%, #2563eb 100%);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      width: 330px;
+      background: var(--aura-bg);
+      color: var(--text-main);
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      font-size: 13px;
+      overflow: hidden;
+    }
+
+    .wrap {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .head img {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+
+    .title {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      background: var(--btn-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-transform: uppercase;
+    }
+
+    .card {
+      background: var(--glass);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(112, 137, 190, 0.55);
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.28);
+      text-align: center;
+    }
+
+    .status {
+      color: var(--text-muted);
+      margin-bottom: 15px;
+      font-weight: 500;
+      min-height: 18px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #0d9488, #118a80);
+      color: #ffffff;
+      cursor: pointer;
+      font-weight: 700;
+      padding: 12px;
+      flex: 1;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      background: linear-gradient(135deg, #14b8a6, #0f766e);
+      color: #ffffff;
+      box-shadow: 0 6px 18px rgba(255, 154, 158, 0.2);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    .mode-indicator {
+      font-size: 10px;
+      padding: 3px 10px;
+      border-radius: 10px;
+      display: inline-block;
+      background: rgba(0,229,255,0.12);
+      color: #00e5ff;
+    }
+    
+    /* Card hover */
+    .card {
+      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+                  box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 44px rgba(0, 0, 0, 0.38);
+    }
+    
+    /* Button hover */
+    button {
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="head">
+      <img src="icons/icon48.png" alt="APEx">
+      <div class="title">APEx</div>
+    </div>
+
+    <div class="card">
+      <div style="margin-bottom:8px">
+        <span id="popupMode" class="mode-indicator">Stripe</span>
+      </div>
+      <div id="status" class="status">Loading...</div>
+      <div class="actions" style="flex-direction:column">
+        <button id="toggleBtn" type="button" style="background:linear-gradient(135deg,#0d9488,#118a80)">START</button>
+        <button id="openBtn" type="button" style="background:linear-gradient(135deg,#2563eb,#1d4ed8)">DASHBOARD</button>
+      </div>
+    </div>
+  </div>
+  <script src="script/popup.js"></script>
+</body>
+</html>

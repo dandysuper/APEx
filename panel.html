@@ -1,0 +1,1199 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>APExAuto</title>
+  <style>
+    
+    :root {
+      --bg-1: #07122e;
+      --bg-2: #0f2a5f;
+      --aura-bg: linear-gradient(135deg, #07122e 0%, #102a63 58%, #0a1433 100%);
+      --panel: rgba(7, 18, 46, 0.96);
+      --line: rgba(112, 137, 190, 0.55);
+      --text: #e5ecff;
+      --muted: #9fb0d9;
+      --ok: #4ade80;
+      --err: #f87171;
+      --btn: linear-gradient(135deg, #0d9488, #118a80);
+      --btn-hover: linear-gradient(135deg, #14b8a6, #0f766e);
+      --chip: #0a1a3f;
+      --accent-gradient: linear-gradient(to right, #14b8a6 0%, #2563eb 100%);
+    }
+
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(220px 180px at var(--mouse-x) var(--mouse-y), rgba(20, 184, 166, 0.12) 0%, rgba(20, 184, 166, 0) 72%),
+        var(--aura-bg);
+      color: var(--text);
+      font: 13px/1.4 "Segoe UI", Tahoma, sans-serif;
+      padding: 18px;
+      position: relative;
+      overflow-x: hidden;
+      isolation: isolate;
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    body::before {
+      background:
+        radial-gradient(40% 28% at 10% 8%, rgba(117, 192, 255, 0.34) 0%, rgba(117, 192, 255, 0.08) 56%, rgba(117, 192, 255, 0) 76%),
+        radial-gradient(34% 24% at 29% 10%, rgba(92, 166, 244, 0.32) 0%, rgba(92, 166, 244, 0.08) 56%, rgba(92, 166, 244, 0) 76%),
+        radial-gradient(36% 26% at 55% 7%, rgba(124, 198, 255, 0.34) 0%, rgba(124, 198, 255, 0.08) 54%, rgba(124, 198, 255, 0) 76%),
+        radial-gradient(42% 28% at 88% 10%, rgba(95, 164, 238, 0.32) 0%, rgba(95, 164, 238, 0.08) 56%, rgba(95, 164, 238, 0) 78%),
+        linear-gradient(to bottom, rgba(75, 138, 225, 0.2) 0%, rgba(43, 85, 165, 0.09) 26%, rgba(10, 24, 56, 0) 62%);
+      filter: blur(18px) saturate(120%);
+      mix-blend-mode: screen;
+      opacity: 0.38;
+      animation:
+        smokeFlow 13s ease-in-out infinite alternate,
+        smokePulse 5.6s ease-in-out infinite;
+      transform: translate3d(var(--parallax-x), var(--parallax-y), 0) scale(1.04);
+      transform-origin: 50% 20%;
+    }
+
+    body::after {
+      background:
+        radial-gradient(13% 56% at 42% 108%, rgba(255, 92, 20, 0.86) 0%, rgba(255, 92, 20, 0.44) 44%, rgba(255, 92, 20, 0) 76%),
+        radial-gradient(10% 64% at 50% 104%, rgba(255, 196, 58, 0.96) 0%, rgba(255, 180, 45, 0.62) 40%, rgba(255, 180, 45, 0) 78%),
+        radial-gradient(14% 56% at 58% 108%, rgba(255, 74, 12, 0.84) 0%, rgba(255, 74, 12, 0.4) 46%, rgba(255, 74, 12, 0) 78%),
+        radial-gradient(30% 28% at 50% 104%, rgba(255, 132, 34, 0.44) 0%, rgba(255, 132, 34, 0) 72%),
+        radial-gradient(240px 170px at var(--mouse-x) calc(var(--mouse-y) + 26px), rgba(255, 188, 74, 0.16) 0%, rgba(255, 188, 74, 0) 72%),
+        radial-gradient(2px 2px at 22% 96%, rgba(255, 224, 146, 0.66) 0%, rgba(255, 224, 146, 0) 70%),
+        radial-gradient(2px 2px at 36% 97%, rgba(255, 172, 86, 0.62) 0%, rgba(255, 172, 86, 0) 70%),
+        radial-gradient(2px 2px at 52% 96%, rgba(255, 230, 156, 0.66) 0%, rgba(255, 230, 156, 0) 70%),
+        radial-gradient(2px 2px at 69% 97%, rgba(255, 170, 82, 0.62) 0%, rgba(255, 170, 82, 0) 70%),
+        radial-gradient(2px 2px at 82% 96%, rgba(255, 226, 148, 0.66) 0%, rgba(255, 226, 148, 0) 70%);
+      filter: blur(6px) saturate(152%);
+      mix-blend-mode: screen;
+      opacity: 0.22;
+      animation:
+        flameLift 2.7s ease-in-out infinite alternate,
+        flameFlicker 1.12s steps(8, end) infinite,
+        emberLift 7.2s linear infinite;
+      transform: translate3d(var(--parallax-x-inv), var(--parallax-y-inv), 0);
+    }
+
+    @keyframes smokeFlow {
+      0% {
+        transform: translate3d(var(--parallax-x), var(--parallax-y), 0) scale(1.03);
+      }
+      100% {
+        transform: translate3d(var(--parallax-x), calc(var(--parallax-y) - 12px), 0) scale(1.08);
+      }
+    }
+
+    @keyframes smokePulse {
+      0% { opacity: 0.78; }
+      45% { opacity: 0.94; }
+      100% {
+        opacity: 0.84;
+      }
+    }
+
+    @keyframes flameLift {
+      0% {
+        transform: translate3d(var(--parallax-x-inv), calc(var(--parallax-y-inv) + 10px), 0) scaleY(0.9) scaleX(1);
+      }
+      50% {
+        transform: translate3d(var(--parallax-x-inv), calc(var(--parallax-y-inv) - 6px), 0) scaleY(1.12) scaleX(1.03);
+      }
+      100% {
+        transform: translate3d(var(--parallax-x-inv), calc(var(--parallax-y-inv) + 4px), 0) scaleY(0.95) scaleX(0.98);
+      }
+    }
+
+    @keyframes flameFlicker {
+      0% { opacity: 0.82; }
+      12% { opacity: 1; }
+      25% { opacity: 0.86; }
+      43% { opacity: 0.96; }
+      61% { opacity: 0.84; }
+      78% { opacity: 0.98; }
+      100% { opacity: 0.88; }
+    }
+
+    @keyframes emberLift {
+      0% {
+        background-position:
+          42% 108%, 50% 104%, 58% 108%, 50% 104%, var(--mouse-x) calc(var(--mouse-y) + 26px),
+          22% 100%, 36% 100%, 52% 100%, 69% 100%, 82% 100%;
+        opacity: 0.92;
+      }
+      100% {
+        background-position:
+          42% 108%, 50% 104%, 58% 108%, 50% 104%, var(--mouse-x) calc(var(--mouse-y) + 26px),
+          22% 88%, 36% 84%, 52% 86%, 69% 83%, 82% 87%;
+        opacity: 0.72;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      body::before,
+      body::after {
+        animation: none;
+      }
+    }
+
+    .wrap {
+      max-width: 920px;
+      margin: 0 auto;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--panel);
+      box-shadow: 0 24px 56px rgba(0, 0, 0, 0.35);
+      overflow: hidden;
+      backdrop-filter: blur(4px);
+      position: relative;
+      z-index: 1;
+    }
+
+    .head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(10, 28, 72, 0.55);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      letter-spacing: 0.3px;
+    }
+
+    .brand img {
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+    }
+
+    .target {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .status {
+      margin: 10px 16px 0;
+      padding: 8px 10px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      color: var(--muted);
+      background: rgba(12, 28, 66, 0.55);
+      min-height: 36px;
+    }
+
+    .status.ok { color: var(--ok); }
+    .status.err { color: var(--err); }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      padding: 12px 16px 18px;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(15, 31, 69, 0.65);
+      padding: 10px;
+    }
+
+    .card h3 {
+      margin: 0 0 8px;
+      font-size: 12px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #b8c7ee;
+    }
+
+    .mode {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .mode button {
+      flex: 1;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 8px;
+      background: var(--chip);
+      color: var(--text);
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .mode button.active {
+      background: linear-gradient(135deg, #0d9488, #118a80);
+      border-color: #1ed8c5;
+    }
+
+    .row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .row:last-child { margin-bottom: 0; }
+
+    input[type="text"],
+    input[type="password"],
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #0a1a3f;
+      color: #f1f5ff;
+      padding: 8px 10px;
+      outline: none;
+    }
+
+    .switch-row select {
+      width: 210px;
+      max-width: 100%;
+    }
+
+    textarea {
+      min-height: 96px;
+      resize: vertical;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 12px;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 8px;
+      background: var(--btn);
+      color: #fff;
+      cursor: pointer;
+      font-weight: 700;
+      padding: 8px 12px;
+    }
+
+    .btn:hover { background: var(--btn-hover); }
+
+    .btn-alt {
+      background: #173260;
+    }
+
+    .btn-alt:hover {
+      background: #1f4278;
+    }
+
+    .log-list {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 8px;
+      background: #0a1a3f;
+      max-height: 184px;
+      overflow: auto;
+    }
+
+    .log-item {
+      padding: 6px 0;
+      border-bottom: 1px dashed #22407e;
+      color: #c6d4f4;
+      font-size: 12px;
+      word-break: break-word;
+    }
+
+    .log-item:last-child { border-bottom: 0; }
+
+    .switch-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 6px 0;
+      color: #cad7f5;
+    }
+
+    .foot {
+      position: sticky;
+      bottom: 0;
+      padding: 12px 16px 16px;
+      background: linear-gradient(to top, rgba(7, 18, 46, 0.98), rgba(7, 18, 46, 0.62));
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .start-btn {
+      min-width: 140px;
+      font-size: 14px;
+      padding: 10px 14px;
+    }
+
+    .start-btn.running {
+      background: linear-gradient(135deg, #b91c1c, #ef4444);
+    }
+
+    .hidden { display: none !important; }
+
+    /* iOS Toggle - match styles.css */
+    .switch-row label:first-child { cursor: pointer; flex: 1; }
+
+    /* Card hover lift effect */
+    .card {
+      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+                  box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.35),
+                  0 0 20px rgba(0, 229, 255, 0.12) !important;
+    }
+
+    /* Mode button hover enhancement */
+    .mode button {
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .mode button:hover:not(.active) {
+      border-color: rgba(0, 229, 255, 0.4);
+      background: rgba(0, 229, 255, 0.08);
+    }
+
+    /* Input focus glow */
+    input[type="text"]:focus,
+    input[type="password"]:focus,
+    select:focus,
+    textarea:focus {
+      box-shadow: 0 0 0 3px rgba(0, 229, 255, 0.15) !important;
+    }
+
+    /* Start button pulse when running */
+    .start-btn.running {
+      animation: btnPulse 1.8s ease-in-out infinite;
+    }
+    @keyframes btnPulse {
+      0%, 100% { box-shadow: 0 0 15px rgba(255, 0, 64, 0.3), 0 0 30px rgba(255, 0, 0, 0.2) !important; }
+      50% { box-shadow: 0 0 22px rgba(255, 0, 64, 0.45), 0 0 40px rgba(255, 0, 0, 0.3) !important; }
+    }
+
+    /* Apex tab indicator glow */
+    .apex-tab.active {
+      text-shadow: 0 0 14px rgba(0, 229, 255, 0.35);
+    }
+
+    @media (max-width: 860px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+
+
+    /* APEx neon glassmorphism redesign */
+    body {
+      background: radial-gradient(circle at 20% 30%, #0a0f1e, #03050a) !important;
+      padding: 14px !important;
+    }
+    body::before,
+    body::after {
+      animation: none !important;
+      opacity: 0 !important;
+    }
+    .wrap {
+      max-width: 980px !important;
+      border-radius: 24px !important;
+      background: rgba(10, 15, 30, 0.85) !important;
+      backdrop-filter: blur(20px) !important;
+      -webkit-backdrop-filter: blur(20px) !important;
+      border: 1px solid rgba(0, 255, 255, 0.15) !important;
+      box-shadow: 0 24px 60px rgba(0,0,0,.5), 0 0 30px rgba(0, 229, 255, 0.08) !important;
+      overflow: hidden !important;
+    }
+    .head {
+      background: linear-gradient(135deg, rgba(0, 229, 255, 0.12), rgba(178, 0, 255, 0.08)) !important;
+      border-bottom: 1px solid rgba(0, 255, 255, 0.2) !important;
+    }
+    .brand span { 
+      background: linear-gradient(135deg, #00e5ff, #b200ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 900;
+    }
+    .target { color: #94a3b8 !important; }
+    .status {
+      background: rgba(10, 15, 30, 0.7) !important;
+      border-color: rgba(0, 255, 255, 0.25) !important;
+      color: #00e5ff !important;
+      backdrop-filter: blur(8px) !important;
+    }
+    .apex-zone-title {
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #00e5ff;
+      text-shadow: 0 0 10px rgba(0, 229, 255, 0.15);
+      padding: 16px 16px 8px;
+    }
+    .apex-tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      border-bottom: 1px solid rgba(0, 255, 255, 0.15);
+      background: rgba(10, 15, 30, 0.9);
+    }
+    .apex-tab {
+      padding: 11px 10px;
+      text-align: center;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .9px;
+      text-transform: uppercase;
+      color: #94a3b8;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s ease;
+    }
+    .apex-tab.active {
+      color: #00e5ff;
+      border-bottom-color: #00e5ff;
+      background: rgba(0, 229, 255, 0.08);
+      text-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
+    }
+    .apex-page { display: none; }
+    .apex-page.active { display: block; }
+    .apex-dashboard {
+      padding: 14px 16px 4px;
+      display: grid;
+      gap: 12px;
+    }
+    .operator-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px;
+      border-radius: 20px;
+      border: 1px solid rgba(0, 255, 255, 0.18);
+      background: rgba(20, 25, 45, 0.6);
+      backdrop-filter: blur(12px);
+    }
+    .operator-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .operator-avatar {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      color: #0f172a;
+      font-weight: 900;
+      background: linear-gradient(135deg, #00e5ff, #b200ff);
+      box-shadow: 0 0 20px rgba(0, 229, 255, 0.3);
+    }
+    .operator-name {
+      font-size: 18px;
+      font-weight: 900;
+      color: #f8fafc;
+      line-height: 1.1;
+      text-shadow: 0 0 12px rgba(0, 229, 255, 0.15);
+    }
+    .operator-sub {
+      color: #7e8aa8;
+      font-size: 11px;
+      margin-top: 3px;
+      letter-spacing: .8px;
+      text-transform: uppercase;
+    }
+    .apex-version-pill {
+      border: 1px solid rgba(0, 255, 255, 0.4);
+      color: #00e5ff;
+      background: rgba(0, 229, 255, 0.08);
+      border-radius: 999px;
+      padding: 6px 9px;
+      font-size: 11px;
+      font-weight: 800;
+      box-shadow: 0 0 10px rgba(0, 229, 255, 0.15);
+    }
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    .stat-card {
+      min-height: 72px;
+      border: 1px solid rgba(0, 255, 255, 0.12);
+      border-radius: 18px;
+      background: rgba(20, 25, 45, 0.5);
+      backdrop-filter: blur(8px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+    .stat-label {
+      font-size: 10px;
+      letter-spacing: 1px;
+      color: #7e8aa8;
+      text-transform: uppercase;
+      font-weight: 800;
+    }
+    .stat-value {
+      font-size: 19px;
+      color: #f8fafc;
+      font-weight: 900;
+    }
+    .stat-value.good { color: #00e5ff; text-shadow: 0 0 12px rgba(0, 229, 255, 0.3); }
+    .grid { padding-top: 12px !important; }
+    .card {
+      background: rgba(20, 25, 45, 0.6) !important;
+      backdrop-filter: blur(12px) !important;
+      -webkit-backdrop-filter: blur(12px) !important;
+      border: 1px solid rgba(0, 255, 255, 0.2) !important;
+      border-radius: 24px !important;
+      box-shadow: 0 10px 30px rgba(0,0,0,.2), 0 0 15px rgba(0, 229, 255, 0.06) !important;
+    }
+    .card h3 { 
+      color: #00e5ff !important;
+      text-shadow: 0 0 10px rgba(0, 229, 255, 0.15);
+    }
+    .mode button { 
+      background: rgba(20, 25, 45, 0.7) !important;
+      border: 1px solid rgba(0, 255, 255, 0.1) !important;
+      border-radius: 12px !important;
+      color: #94a3b8 !important;
+      transition: all 0.2s ease;
+    }
+    .mode button.active { 
+      background: linear-gradient(135deg, #00e5ff, #0088ff) !important;
+      border-color: #00e5ff !important;
+      color: #fff !important;
+      box-shadow: 0 0 15px rgba(0, 229, 255, 0.3) !important;
+    }
+    input[type="text"], input[type="password"], select, textarea, .log-list {
+      background: rgba(10, 15, 30, 0.7) !important;
+      border-color: rgba(0, 255, 255, 0.15) !important;
+      color: #e5ecff !important;
+      border-radius: 12px !important;
+      transition: border-color 0.2s ease;
+    }
+    input[type="text"]:focus, input[type="password"]:focus, select:focus, textarea:focus {
+      border-color: rgba(0, 229, 255, 0.5) !important;
+      box-shadow: 0 0 12px rgba(0, 229, 255, 0.15) !important;
+      outline: none;
+    }
+    .btn { 
+      border-radius: 12px !important; 
+      background: linear-gradient(135deg, #00e5ff, #0088ff) !important;
+      color: #fff !important;
+      box-shadow: 0 0 15px rgba(0, 229, 255, 0.25) !important;
+      border: none !important;
+      transition: all 0.2s ease;
+      font-weight: 800 !important;
+    }
+    .btn:hover {
+      box-shadow: 0 0 25px rgba(0, 229, 255, 0.4) !important;
+      transform: translateY(-1px);
+    }
+    .btn-alt {
+      background: rgba(20, 25, 45, 0.8) !important;
+      box-shadow: none !important;
+      border: 1px solid rgba(0, 255, 255, 0.2) !important;
+    }
+    .btn-alt:hover {
+      border-color: rgba(0, 229, 255, 0.5) !important;
+      box-shadow: 0 0 12px rgba(0, 229, 255, 0.15) !important;
+    }
+    .foot { 
+      background: rgba(10, 15, 30, 0.95) !important;
+      border-top: 1px solid rgba(0, 255, 255, 0.12) !important;
+    }
+    #startBtn.start-btn {
+      border-radius: 999px !important;
+      min-width: 140px;
+      font-size: 14px;
+      padding: 10px 14px;
+    }
+    #startBtn.start-btn.running {
+      background: linear-gradient(135deg, #b91c1c, #ef4444) !important;
+      box-shadow: 0 0 15px rgba(255, 0, 64, 0.3), 0 0 30px rgba(255, 0, 0, 0.2) !important;
+    }
+
+
+    /* APEx v4 Tools tab / safe feature cards */
+    .apex-tools-panel {
+      padding: 0 16px 18px;
+      display: grid;
+      gap: 12px;
+    }
+    .apex-tools-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding-top: 2px;
+    }
+    .apex-tools-title {
+      font-size: 13px;
+      font-weight: 900;
+      color: #e2e8f0;
+      letter-spacing: .8px;
+      text-transform: uppercase;
+    }
+    .apex-tools-note {
+      color: #94a3b8;
+      font-size: 11px;
+      line-height: 1.35;
+    }
+    .apex-tools-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .tool-card {
+      border: 1px solid rgba(0, 255, 255, 0.15);
+      border-radius: 20px;
+      background: rgba(20, 25, 45, 0.55);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: 0 10px 30px rgba(0,0,0,.2), 0 0 12px rgba(0, 229, 255, 0.05);
+      padding: 12px;
+      min-height: 250px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .tool-card h3 {
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      color: #00e5ff;
+      font-size: 12px;
+      letter-spacing: .9px;
+      text-transform: uppercase;
+      text-shadow: 0 0 10px rgba(0, 229, 255, 0.15);
+    }
+    .tool-pill {
+      border-radius: 999px;
+      padding: 3px 7px;
+      font-size: 9px;
+      font-weight: 900;
+      color: #00e5ff;
+      background: rgba(0, 229, 255, 0.1);
+      border: 1px solid rgba(0, 229, 255, 0.3);
+      white-space: nowrap;
+      box-shadow: 0 0 8px rgba(0, 229, 255, 0.15);
+    }
+    .tool-mini-note {
+      color: #94a3b8;
+      font-size: 10.5px;
+      line-height: 1.35;
+      min-height: 28px;
+    }
+    .tool-field {
+      display: grid;
+      gap: 4px;
+    }
+    .tool-field label {
+      color: #7e8aa8;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: .8px;
+      text-transform: uppercase;
+    }
+    .tool-card input, .tool-card select {
+      width: 100%;
+      border-radius: 12px;
+      border: 1px solid rgba(0, 255, 255, 0.15);
+      background: rgba(10, 15, 30, 0.7);
+      color: #e5ecff;
+      padding: 9px 10px;
+      outline: none;
+      font-size: 11px;
+      transition: border-color 0.2s ease;
+    }
+    .tool-card input:focus, .tool-card select:focus {
+      border-color: rgba(0, 229, 255, 0.5);
+      box-shadow: 0 0 12px rgba(0, 229, 255, 0.15);
+    }
+    .tool-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 7px;
+    }
+    .tool-actions.single { grid-template-columns: 1fr; }
+    .tool-result {
+      margin-top: auto;
+      min-height: 68px;
+      max-height: 128px;
+      overflow: auto;
+      white-space: pre-wrap;
+      border: 1px solid rgba(0, 255, 255, 0.12);
+      border-radius: 14px;
+      background: rgba(10, 15, 30, 0.6);
+      backdrop-filter: blur(6px);
+      color: #cbd5e1;
+      padding: 9px;
+      font: 10.5px/1.35 Consolas, 'JetBrains Mono', monospace;
+    }
+    .local-board {
+      margin-top: auto;
+      display: grid;
+      gap: 5px;
+      max-height: 128px;
+      overflow: auto;
+      border: 1px solid rgba(0, 255, 255, 0.12);
+      border-radius: 14px;
+      background: rgba(10, 15, 30, 0.5);
+      padding: 8px;
+    }
+    .local-board-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      color: #cbd5e1;
+      font-size: 11px;
+      border-bottom: 1px dashed rgba(0, 255, 255, 0.1);
+      padding-bottom: 4px;
+    }
+    .local-board-row:last-child { border-bottom: 0; padding-bottom: 0; }
+    .apex-success-preview {
+      position: fixed;
+      left: 50%;
+      top: 70px;
+      transform: translate(-50%, -18px) scale(.98);
+      min-width: 330px;
+      max-width: 440px;
+      z-index: 999999;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity .2s ease, transform .2s ease;
+      border: 1px solid rgba(0, 255, 255, 0.3);
+      border-radius: 20px;
+      background: rgba(10, 15, 30, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 24px 70px rgba(0,0,0,.4), 0 0 30px rgba(0, 255, 255, 0.25);
+      color: #f8fafc;
+      padding: 16px 18px 14px;
+      overflow: hidden;
+    }
+    .apex-success-preview.show { opacity: 1; transform: translate(-50%, 0) scale(1); }
+    .apex-success-preview::before {
+      content: '';
+      position: absolute;
+      inset: -60% -40%;
+      background: radial-gradient(circle at 20% 20%, rgba(0, 229, 255, 0.15), transparent 18%), radial-gradient(circle at 80% 30%, rgba(178, 0, 255, 0.12), transparent 18%);
+      animation: apexToastGlow 1.6s ease-in-out infinite alternate;
+    }
+    .apex-success-content { position: relative; z-index: 1; }
+    .apex-success-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: #00e5ff;
+      font-weight: 900;
+      font-size: 10px;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      border: 1px solid rgba(0, 229, 255, 0.3);
+      background: linear-gradient(135deg, rgba(0, 229, 255, 0.12), rgba(178, 0, 255, 0.12));
+      padding: 3px 8px;
+      border-radius: 999px;
+      margin-bottom: 8px;
+    }
+    .apex-success-title { font-size: 19px; font-weight: 900; margin-bottom: 3px; background: linear-gradient(135deg, #00e5ff, #b200ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .apex-success-sub { color: #94a3b8; font-size: 12px; }
+    .apex-success-bar { height: 3px; margin-top: 13px; border-radius: 999px; overflow: hidden; background: rgba(148,163,184,.18); }
+    .apex-success-bar span { display:block; height:100%; width:100%; background: linear-gradient(90deg, #00e5ff, #b200ff); transform-origin:left; animation: apexToastBar 2.6s linear forwards; }
+    @keyframes apexToastGlow { from { transform: translateX(-2%); } to { transform: translateX(2%); } }
+    @keyframes apexToastBar { from { transform: scaleX(1); } to { transform: scaleX(0); } }
+    @media (max-width: 900px) {
+      .apex-tools-grid { grid-template-columns: 1fr; }
+      .tool-card { min-height: unset; }
+    }
+
+    @media (max-width: 760px) {
+      .stat-grid { grid-template-columns: repeat(2, 1fr); }
+      .apex-tabs { grid-template-columns: repeat(2, 1fr); }
+    }
+
+
+    .apex-proxy-grid {
+      grid-template-columns: minmax(320px, 1.2fr) minmax(260px, .8fr);
+    }
+
+    .apex-live-status {
+      display: grid;
+      gap: 7px;
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 14px;
+      background: rgba(10, 15, 30, 0.6);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(0, 255, 255, 0.12);
+    }
+
+    .apex-live-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 11px;
+      color: #94a3b8;
+    }
+
+    .apex-live-row strong {
+      max-width: 190px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-family: var(--mono, monospace);
+      color: #d7fff8;
+      font-size: 11px;
+      text-align: right;
+    }
+
+    .apex-live-row strong.ok { color: #00e5ff; text-shadow: 0 0 8px rgba(0, 229, 255, 0.3); }
+    .apex-live-row strong.err { color: #f87171; }
+
+  </style>
+</head>
+<body>
+  <div id="mainContent" class="main-content">
+    <div class="wrap">
+      <div class="head">
+        <div class="brand">
+          <img src="icons/icon16.png" alt="">
+          <span>APExAuto</span>
+        </div>
+        <div id="targetInfo" class="target">Resolving checkout tab...</div>
+      </div>
+
+      <div id="status" class="status">Loading panel...</div>
+
+      <div class="apex-tabs" id="apexPageTabs">
+        <div class="apex-tab active" data-page="tools">Tools</div>
+        <div class="apex-tab" data-page="proxy">Proxy</div>
+        <div class="apex-tab" data-page="history">History</div>
+      </div>
+
+    <div id="pageTools" class="apex-page active">
+      <div class="apex-zone-title">Tools</div>
+
+      <div class="grid">
+      <section class="card" style="position:relative;overflow:visible">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px">
+          <span style="font-size:16px">⚡</span>
+          <span style="background:linear-gradient(135deg,#ffd700,#ffaa00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:900;font-size:12px;letter-spacing:.5px">APEx GOLD</span>
+          <span style="margin-left:auto;font-size:10px;padding:1px 6px;border-radius:4px;background:rgba(0,229,255,0.1);color:#00e5ff;font-weight:700">BIN/CC</span>
+        </div>
+        <div class="mode">
+          <button id="modeBin" class="active" type="button">BIN</button>
+          <button id="modeCc" type="button">CC</button>
+        </div>
+
+        <div class="row" style="display:flex;gap:6px;align-items:stretch">
+          <input id="binCcInput" type="text" placeholder="Enter BIN digits" style="flex:1;min-width:0">
+          <button id="saveCloudBtn" class="btn" type="button" style="white-space:nowrap;padding:8px 10px;font-size:10px">Save Cloud</button>
+        </div>
+        <textarea id="binInput" style="display:none"></textarea>
+        <textarea id="ccInput" style="display:none"></textarea>
+
+        <div id="cloudSection">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:6px;margin-bottom:4px">
+            <span style="color:#7e8aa8;font-size:10px;font-weight:800;letter-spacing:.5px;text-transform:uppercase">Cloud BINs</span>
+            <span id="cloudCount" style="color:#64748b;font-size:9px"></span>
+          </div>
+          <div id="cloudBinList" style="max-height:140px;overflow:auto;margin-bottom:6px;border:1px solid rgba(0,255,255,0.08);border-radius:10px;padding:4px;background:rgba(10,15,30,0.4)">
+            <div style="color:#7e8aa8;font-size:11px;padding:4px">No cloud BINs saved.</div>
+          </div>
+        </div>
+
+        <div class="row" style="display:flex;gap:6px;margin-top:4px">
+          <button id="saveLocalBtn" class="btn" type="button" style="flex:1;font-size:10px">Save Local</button>
+        </div>
+
+        <div id="binInUseDisplay" style="margin-top:6px;padding:6px 8px;border-radius:8px;background:rgba(10,15,30,0.5);border:1px solid rgba(0,255,255,0.1);text-align:center">
+          <span style="color:#7e8aa8;font-size:10px">BIN IN USE</span> <span style="color:#64748b;font-size:11px">none</span>
+        </div>
+      </section>
+
+      <section class="card">
+        <h3>Logs</h3>
+        <div id="logList" class="log-list" style="max-height:200px">
+          <div class="log-item">No logs yet.</div>
+        </div>
+        <div class="row" style="margin-top:8px">
+          <button id="clearLogsBtn" class="btn btn-alt" type="button">Clear Logs</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <h3>Telegram</h3>
+        <div class="row">
+          <input id="tgBotToken" type="password" placeholder="Bot token from BotFather" autocomplete="off">
+        </div>
+        <div class="row">
+          <input id="tgChatId" type="text" placeholder="Your Telegram chat ID" autocomplete="off">
+        </div>
+        <div class="row">
+          <div id="tgState" class="target">Telegram alerts are off until you save your own bot token and chat ID.</div>
+        </div>
+        <div class="switch-row">
+          <label for="tgUserSsToggle">Enable Telegram Alerts</label>
+          <label class="ios-toggle"><input id="tgUserSsToggle" type="checkbox"><span class="ios-slider"></span></label>
+        </div>
+        <div class="row">
+          <button id="tgTestBtn" class="btn btn-alt" type="button">Send Test</button>
+          <button id="tgSaveBtn" class="btn" type="button">Save Telegram</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <h3>Settings</h3>
+        <div class="row">
+          <input id="nameInput" type="text" placeholder="Name">
+        </div>
+        <div class="row">
+          <input id="emailInput" type="text" placeholder="Email">
+        </div>
+
+        <div class="switch-row">
+          <label for="hitSoundToggle">Hit Sound</label>
+          <label class="ios-toggle"><input id="hitSoundToggle" type="checkbox"><span class="ios-slider"></span></label>
+        </div>
+        <div class="switch-row">
+          <label for="autoSsToggle">Auto Screenshot</label>
+          <label class="ios-toggle"><input id="autoSsToggle" type="checkbox" checked><span class="ios-slider"></span></label>
+        </div>
+        <div class="switch-row">
+          <label for="blurEmailToggle">Blur Email on Stripe</label>
+          <label class="ios-toggle"><input id="blurEmailToggle" type="checkbox"><span class="ios-slider"></span></label>
+        </div>
+        <div class="switch-row">
+          <label for="bypass3dsToggle">3DS Bypass (Relay)</label>
+          <label class="ios-toggle"><input id="bypass3dsToggle" type="checkbox" checked><span class="ios-slider"></span></label>
+        </div>
+        <div class="switch-row">
+          <label for="fxToggle">Hit Effects</label>
+          <label class="ios-toggle"><input id="fxToggle" type="checkbox" checked><span class="ios-slider"></span></label>
+        </div>
+        <div class="switch-row" style="margin-top:6px">
+          <label for="addressModeSelect">Address Autofill</label>
+          <select id="addressModeSelect" style="width: 140px">
+            <option value="auto">Auto</option>
+            <option value="keep_country">Keep Current Country</option>
+          </select>
+        </div>
+
+        <div style="margin-top:12px">
+          <div style="font-size:11px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px">Theme</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button id="themeDefault" class="btn btn-alt" type="button" style="font-size:11px;padding:6px 12px" data-theme="">Default</button>
+            <button id="themeNarutox" class="btn btn-alt" type="button" style="font-size:11px;padding:6px 12px" data-theme="narutox">NarutoX</button>
+            <button id="themeLiquid" class="btn btn-alt" type="button" style="font-size:11px;padding:6px 12px" data-theme="liquid">Liquid Glass</button>
+            <button id="themeBlur" class="btn btn-alt" type="button" style="font-size:11px;padding:6px 12px" data-theme="blur">Blur</button>
+          </div>
+        </div>
+
+        <div style="margin-top:10px">
+          <div style="font-size:11px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px">Accent Color</div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <input id="accentColor1" type="color" value="#00c896" style="width:32px;height:32px;border:2px solid var(--line);border-radius:8px;cursor:pointer;background:transparent">
+            <input id="accentColor2" type="color" value="#6366f1" style="width:32px;height:32px;border:2px solid var(--line);border-radius:8px;cursor:pointer;background:transparent">
+            <span style="font-size:10px;color:var(--muted)">Primary / Secondary</span>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:12px">
+          <button id="saveSettingsBtn" class="btn" type="button">Save Settings</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <h3>Captcha Solver</h3>
+        <div class="row">
+          <select id="captchaProviderSelect">
+            <option value="">-- Disabled --</option>
+            <option value="2captcha">2Captcha</option>
+            <option value="capsolver">Capsolver</option>
+            <option value="anticaptcha">Anti-Captcha</option>
+            <option value="capmonster">CapMonster Cloud</option>
+            <option value="custom">Custom Endpoint</option>
+          </select>
+        </div>
+        <div class="row">
+          <input id="captchaApiKeyInput" type="password" placeholder="API Key">
+        </div>
+        <div class="row hidden" id="customEndpointRow">
+          <input id="captchaCustomEndpoint" type="text" placeholder="Custom API URL (e.g. https://your-solver.com)">
+        </div>
+        <div class="row">
+          <div id="captchaState" class="target">Status: Not configured</div>
+        </div>
+        <div class="row">
+          <button id="captchaSaveBtn" class="btn" type="button">Save Captcha Config</button>
+          <button id="captchaTestBtn" class="btn btn-alt" type="button">Test API Key</button>
+        </div>
+      </section>
+    </div>
+
+
+    </div>
+
+    <div id="pageProxy" class="apex-page">
+    <section class="apex-tools-panel" id="apexProxyPanel">
+      <div class="apex-tools-title-row">
+        <div>
+          <div class="apex-tools-title">APEx Proxy Manager</div>
+          <div class="apex-tools-note">Paste proxy, connect it to Chrome, test current IP, and show status on the checkout page.</div>
+        </div>
+        <span class="apex-version-pill">v5 proxy</span>
+      </div>
+
+      <div class="apex-tools-grid apex-proxy-grid">
+        <section class="tool-card apex-proxy-card" id="proxyManagerCard">
+          <h3>Proxy <span class="tool-pill">Live</span></h3>
+          <div class="tool-mini-note">Format: host:port:user:pass. Use activates the proxy, Disconnect deactivates it.</div>
+          <div class="tool-field">
+            <label for="proxyValueInput">Proxy</label>
+            <input id="proxyValueInput" type="password" placeholder="host:port:user:pass" autocomplete="off">
+          </div>
+          <div class="tool-actions">
+            <button id="useProxyBtn" class="btn" type="button">Use</button>
+            <button id="clearProxyBtn" class="btn btn-alt" type="button">Disconnect</button>
+          </div>
+          <div class="tool-actions single">
+            <button id="detectIpBtn" class="btn btn-alt" type="button">Detect Current IP</button>
+          </div>
+          <div id="proxyStatusBox" class="apex-live-status">
+            <div class="apex-live-row"><span>Status</span><strong id="proxyLiveStatus">Not Set</strong></div>
+            <div class="apex-live-row"><span>Current IP</span><strong id="proxyLiveIp">--</strong></div>
+            <div class="apex-live-row"><span>Proxy Host</span><strong id="proxyLiveHost">--</strong></div>
+            <div class="apex-live-row"><span>Last Check</span><strong id="proxyLiveTime">--</strong></div>
+          </div>
+          <pre id="proxyToolResult" class="tool-result">Proxy manager ready. Paste proxy and click Connect & Test.</pre>
+        </section>
+
+        <section class="tool-card apex-proxy-help-card">
+          <h3>Checkout Page IP Card <span class="tool-pill">UI</span></h3>
+          <div class="tool-mini-note">The small bottom-left APEx card on checkout pages shows your current IP and proxy status after connect/test.</div>
+          <div class="apex-live-status">
+            <div class="apex-live-row"><span>Side UI</span><strong>Enabled</strong></div>
+            <div class="apex-live-row"><span>Rail</span><strong>A P E x</strong></div>
+            <div class="apex-live-row"><span>Start Button</span><strong>Bottom-right</strong></div>
+          </div>
+          <pre class="tool-result">Removed the old endpoint-only tools. This version focuses on real proxy connect + current IP display.</pre>
+        </section>
+      </div>
+
+      <div class="apex-tools-title-row" style="margin-top:14px">
+        <div>
+          <div class="apex-tools-title">Proxy List & Rotation</div>
+          <div class="apex-tools-note">Save a list of proxies for automatic rotation. One proxy per line: host:port:user:pass</div>
+        </div>
+        <span class="apex-version-pill">rotation</span>
+      </div>
+      <div class="apex-tools-grid" style="grid-template-columns:1fr">
+        <section class="tool-card">
+          <div class="tool-field">
+            <label for="proxyListInput">Proxy List</label>
+            <textarea id="proxyListInput" placeholder="host:port:user:pass&#10;host2:port2:user2:pass2" style="min-height:60px"></textarea>
+          </div>
+          <div class="tool-actions">
+            <button id="saveProxyListBtn" class="btn" type="button">Save Proxy List</button>
+            <button id="useProxyListBtn" class="btn" type="button">Use</button>
+            <button id="disconnectProxyListBtn" class="btn btn-alt" type="button">Disconnect</button>
+          </div>
+          <div class="tool-actions" style="margin-top:6px">
+            <button id="rotateProxyBtn" class="btn btn-alt" type="button">Rotate to Next</button>
+            <button id="clearProxyListBtn" class="btn btn-alt" type="button" style="border-color:#d32f2f;color:#d32f2f">Clear List</button>
+          </div>
+          <div id="proxyListContainer" class="tool-result" style="min-height:36px;padding:6px 8px"></div>
+          <div id="proxyListStatus" style="font-size:11px;color:#888;padding:4px 0 0">Proxy list: 0 saved.</div>
+        </section>
+      </div>
+
+      <div class="apex-tools-title-row" style="margin-top:14px">
+        <div>
+          <div class="apex-tools-title">Fraud Score Check</div>
+          <div class="apex-tools-note">Check fraud score for the current proxy IP.</div>
+        </div>
+        <span class="apex-version-pill">v1</span>
+      </div>
+      <div class="apex-tools-grid" style="grid-template-columns:1fr">
+        <section class="tool-card">
+          <div class="tool-field">
+            <label for="fraudProviderSelect">Fraud Provider</label>
+            <select id="fraudProviderSelect">
+              <option value="scamalytics" selected>Scamalytics</option>
+              <option value="getipintel">GetIPIntel</option>
+            </select>
+          </div>
+          <div class="tool-field">
+            <label for="fraudUserInput">Scamalytics User ID</label>
+            <input id="fraudUserInput" type="text" placeholder="e.g. 6a09304eea73b" autocomplete="off">
+          </div>
+          <div class="tool-field">
+            <label for="fraudApiKeyInput">API Key</label>
+            <input id="fraudApiKeyInput" type="password" placeholder="Enter your API key (optional)" autocomplete="off">
+          </div>
+          <div class="tool-mini-note">Uses the selected provider to check proxy/VPN risk. Leave blank for Scamalytics defaults.</div>
+          <div class="tool-actions single">
+            <button id="checkFraudBtn" class="btn" type="button">Check Fraud Score</button>
+          </div>
+          <div id="fraudInfoBox" class="apex-live-status" style="display:none">
+            <div id="fraudResult" style="font-size:12px;padding:4px 0">Click Check to test.</div>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    </div>
+
+    <div id="pageHistory" class="apex-page">
+      <div class="apex-zone-title">Hit History</div>
+      <div id="historyList" class="log-list" style="max-height:300px;padding:0 16px 12px;font-size:11px">
+        <div class="log-item" style="color:#94a3b8">No hits yet.</div>
+      </div>
+    </div>
+
+    <div class="foot">
+      <button id="startBtn" class="btn start-btn" type="button">Start</button>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:center;padding:8px 0;border-top:1px solid rgba(255,255,255,0.06);margin-top:8px">
+      <button id="exportSettingsBtn" class="btn btn-alt" type="button" style="font-size:11px;padding:4px 12px">Export Settings</button>
+      <button id="importSettingsBtn" class="btn btn-alt" type="button" style="font-size:11px;padding:4px 12px">Import Settings</button>
+    </div>
+  </div>
+
+</div>
+
+<script src="script/panel-nav.js"></script>
+<script src="script/panel-app.js"></script>
+<script src="script/panel-telegram.js"></script>
+<script src="script/panel-bincc.js"></script>
+<script src="script/apex-tools.js"></script>
+<script src="script/captcha-panel.js"></script>
+<script src="script/panel-history.js"></script>
+</body>
+</html>

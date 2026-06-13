@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>APEx Safe Local Test Page</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, sans-serif; margin: 0; padding: 32px; background: #f6f7fb; color: #202124; }
+    main { max-width: 760px; margin: 0 auto; background: #fff; border-radius: 18px; padding: 24px; box-shadow: 0 12px 32px rgba(0,0,0,.08); }
+    label { display: block; margin: 12px 0 4px; font-weight: 700; }
+    input, textarea, select { width: 100%; padding: 10px; border-radius: 10px; border: 1px solid #ccd2dd; box-sizing: border-box; }
+    .note { background: #eef5ff; border: 1px solid #cfe2ff; padding: 12px; border-radius: 12px; margin-bottom: 18px; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>APEx Safe Local Test Page</h1>
+    <div class="note">This page is only for testing extension messaging, storage, UI status, and safe form automation on your own local test form. It is not a checkout/payment/captcha page.</div>
+    <form id="apex-safe-test-form">
+      <label>Name</label>
+      <input data-apex-test="name" autocomplete="off" placeholder="Safe test name">
+      <label>Email</label>
+      <input data-apex-test="email" autocomplete="off" placeholder="safe@example.test">
+      <label>Note</label>
+      <textarea data-apex-test="note" rows="4" placeholder="Safe test note"></textarea>
+      <label>Mode</label>
+      <select data-apex-test="mode"><option>Manual</option><option>QA Test</option></select>
+    </form>
+  </main>
+</body>
+</html>
